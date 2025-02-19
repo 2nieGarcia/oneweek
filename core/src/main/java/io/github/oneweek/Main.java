@@ -1,14 +1,10 @@
 package io.github.oneweek;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+public class Main extends Game {
+    public SpriteBatch batch;
 
 public class Main extends ApplicationAdapter {
     SpriteBatch batch;
@@ -21,8 +17,9 @@ public class Main extends ApplicationAdapter {
     float deceleration = 50;
 
     ParallaxLayer[] layers;
+
     @Override
-    public void create () {
+    public void create() {
         batch = new SpriteBatch();
 		// Viewport size the same as the background texture
 		camera = new OrthographicCamera(1920, 1080);
@@ -47,6 +44,8 @@ public class Main extends ApplicationAdapter {
 		for (ParallaxLayer layer : layers) {
 			layer.setCamera(camera);
 		}
+       this.setScreen(new MenuScreen(this)); // Start with the Menu Screen
+
     }
 
 
@@ -54,11 +53,12 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render () {
 
-
+  
 
 		Gdx.gl.glClearColor(0.047f, 0.067f, 0.133f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+    
+        super.render(); // Delegate render to the active screen
         float deltaTime = Gdx.graphics.getDeltaTime();
 
 		batch.begin();
@@ -113,6 +113,3 @@ public class Main extends ApplicationAdapter {
 
 	}
 }
-
-
-
