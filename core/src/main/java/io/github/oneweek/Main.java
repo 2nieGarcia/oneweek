@@ -1,13 +1,17 @@
 package io.github.oneweek;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends Game {
     public SpriteBatch batch;
 
-public class Main extends ApplicationAdapter {
-    SpriteBatch batch;
     Camera camera;
 	Texture img;
     Player player;
@@ -45,19 +49,13 @@ public class Main extends ApplicationAdapter {
 			layer.setCamera(camera);
 		}
        this.setScreen(new MenuScreen(this)); // Start with the Menu Screen
-
     }
-
-
 
     @Override
     public void render () {
-
-  
-
 		Gdx.gl.glClearColor(0.047f, 0.067f, 0.133f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    
+
         super.render(); // Delegate render to the active screen
         float deltaTime = Gdx.graphics.getDeltaTime();
 
@@ -70,10 +68,7 @@ public class Main extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed > 0) {
             // Gradually reduce speed when SPACE is not pressed
-
             speed -= deceleration;
-
-
 
         }
 
@@ -104,8 +99,6 @@ public class Main extends ApplicationAdapter {
         }
 		batch.end();
 	}
-
-
 
 	@Override
 	public void dispose () {
