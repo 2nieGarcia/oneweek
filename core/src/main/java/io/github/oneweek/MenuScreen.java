@@ -39,7 +39,7 @@ public class MenuScreen implements Screen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                // Add settings screen later or show a dialog
+                game.setScreen(new SettingsScreen(game));
             }
         });
 
