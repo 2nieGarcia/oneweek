@@ -20,13 +20,15 @@ public class GameScreen implements Screen {
     private float acceleration = 50;
     private float deceleration = 50;
 
+    private float playerOffsetX = -1400;
+
     private ParallaxLayer[] layers;
 
     public GameScreen(Main game) {
         this.game = game;
         this.batch = game.batch; // Use the batch from Main to avoid unnecessary creation
         this.camera = new OrthographicCamera(1920, 1080);
-        this.player = new Player(200, -320);
+        this.player = new Player(-2000, -320);
 
         // Initialize Parallax Layers
         layers = new ParallaxLayer[10];
@@ -77,8 +79,9 @@ public class GameScreen implements Screen {
         }
 
         // Player stays fixed relative to the camera
-        float playerOffsetX = -800;
         float playerOffsetY = -280;
+        if(playerOffsetX < -800) playerOffsetX += 460 * deltaTime;
+
         player.setPosition(camera.position.x + playerOffsetX, camera.position.y + playerOffsetY);
 
         player.update(deltaTime);
