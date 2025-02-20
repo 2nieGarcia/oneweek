@@ -1,0 +1,39 @@
+button-up
+  rotate: false
+  xy: 0, 0
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+
+button-down
+  rotate: false
+  xy: 0, 80
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+
+button-checked
+  rotate: false
+  xy: 0, 160
+  size: 200, 80
+  orig: 200, 80
+  offset: 0, 0
+  index: -1
+
+slider-background
+  rotate: false
+  xy: 0, 240
+  size: 300, 20
+  orig: 300, 20
+  offset: 0, 0
+  index: -1
+
+slider-knob
+  rotate: false
+  xy: 0, 260
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
