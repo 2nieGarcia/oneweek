@@ -20,7 +20,7 @@ public class SettingsScreen implements Screen {
     private Stage stage;
     private Slider volumeSlider;
     private TextButton backButton;
-    private Music backgroundMusic;
+//    private Music backgroundMusic;
     private Preferences preferences;
     private TextureAtlas atlas;
     private Skin skin;
@@ -60,10 +60,10 @@ public class SettingsScreen implements Screen {
         float savedVolume = preferences.getFloat("volume", 1.0f);
 
         // Load background music.
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/01. Aerial City.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(savedVolume);
-        backgroundMusic.play();
+//        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/01. Aerial City.mp3"));
+//        backgroundMusic.setLooping(true);
+//        backgroundMusic.setVolume(savedVolume);
+//        backgroundMusic.play();
 
         // Create UI elements using the skin.
         volumeSlider = new Slider(0, 1, 0.01f, false, skin, "default-horizontal");
@@ -79,16 +79,25 @@ public class SettingsScreen implements Screen {
         table.add(backButton).width(200).height(50);
         stage.addActor(table);
 
-        // Listeners for UI elements.
+//        // Listeners for UI elements.
+//        volumeSlider.addListener(new ChangeListener() {
+//            @Override
+//            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
+//                float volume = volumeSlider.getValue();
+//                backgroundMusic.setVolume(volume);
+//                preferences.putFloat("volume", volume);
+//                preferences.flush();
+//            }
+//        });
+
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
                 float volume = volumeSlider.getValue();
-                backgroundMusic.setVolume(volume);
-                preferences.putFloat("volume", volume);
-                preferences.flush();
+                game.setMusicVolume(volume);  // Use the method from Main to adjust volume
             }
         });
+
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -96,7 +105,11 @@ public class SettingsScreen implements Screen {
                 game.setScreen(new MenuScreen(game));
             }
         });
+
+
     }
+
+
 
     @Override
     public void show() {}
@@ -127,6 +140,6 @@ public class SettingsScreen implements Screen {
         stage.dispose();
         skin.dispose();
         atlas.dispose();
-        backgroundMusic.dispose();
+//        backgroundMusic.dispose();
     }
 }
