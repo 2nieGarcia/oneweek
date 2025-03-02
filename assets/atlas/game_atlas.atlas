@@ -2,12 +2,12 @@ game_atlas.png
 size:1024,128
 repeat:none
 button-checked
-bounds:380,2,104,90
+bounds:442,29,104,90
 button-down
-bounds:274,2,104,90
+bounds:336,29,104,90
 button-up
-bounds:486,2,104,90
+bounds:548,29,104,90
 slider-background
-bounds:2,2,270,90
+bounds:2,60,332,59
 slider-knob
-bounds:592,36,81,56
+bounds:2,2,81,56

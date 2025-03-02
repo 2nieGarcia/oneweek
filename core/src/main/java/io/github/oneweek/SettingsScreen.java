@@ -3,7 +3,6 @@ package io.github.oneweek;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,7 +19,6 @@ public class SettingsScreen implements Screen {
     private Stage stage;
     private Slider volumeSlider;
     private TextButton backButton;
-//    private Music backgroundMusic;
     private Preferences preferences;
     private TextureAtlas atlas;
     private Skin skin;
@@ -59,11 +57,6 @@ public class SettingsScreen implements Screen {
         preferences = Gdx.app.getPreferences("GameSettings");
         float savedVolume = preferences.getFloat("volume", 1.0f);
 
-        // Load background music.
-//        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/01. Aerial City.mp3"));
-//        backgroundMusic.setLooping(true);
-//        backgroundMusic.setVolume(savedVolume);
-//        backgroundMusic.play();
 
         // Create UI elements using the skin.
         volumeSlider = new Slider(0, 1, 0.01f, false, skin, "default-horizontal");
@@ -78,17 +71,6 @@ public class SettingsScreen implements Screen {
         table.row();
         table.add(backButton).width(200).height(50);
         stage.addActor(table);
-
-//        // Listeners for UI elements.
-//        volumeSlider.addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-//                float volume = volumeSlider.getValue();
-//                backgroundMusic.setVolume(volume);
-//                preferences.putFloat("volume", volume);
-//                preferences.flush();
-//            }
-//        });
 
         volumeSlider.addListener(new ChangeListener() {
             @Override
@@ -140,6 +122,5 @@ public class SettingsScreen implements Screen {
         stage.dispose();
         skin.dispose();
         atlas.dispose();
-//        backgroundMusic.dispose();
     }
 }
