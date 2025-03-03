@@ -6,35 +6,35 @@ filter: Nearest, Nearest
 repeat: none
 button-checked
   rotate: false
-  xy: 274, 2
+  xy: 336, 29
   size: 104, 90
   orig: 104, 90
   offset: 0, 0
   index: -1
 button-down
   rotate: false
-  xy: 380, 2
+  xy: 442, 29
   size: 104, 90
   orig: 104, 90
   offset: 0, 0
   index: -1
 button-up
   rotate: false
-  xy: 486, 2
+  xy: 548, 29
   size: 104, 90
   orig: 104, 90
   offset: 0, 0
   index: -1
 slider-background
   rotate: false
-  xy: 2, 2
-  size: 270, 90
-  orig: 270, 90
+  xy: 2, 60
+  size: 332, 59
+  orig: 332, 59
   offset: 0, 0
   index: -1
 slider-knob
   rotate: false
-  xy: 592, 36
+  xy: 2, 2
   size: 81, 56
   orig: 81, 56
   offset: 0, 0
