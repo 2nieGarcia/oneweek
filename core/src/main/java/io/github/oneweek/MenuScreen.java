@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,7 +20,6 @@ public class MenuScreen implements Screen {
     private Camera camera;
     private Texture img;
     private Player player;
-    private SpriteBatch batch;
 
     private int speed = 200;
     private float acceleration = 50;
@@ -26,19 +27,27 @@ public class MenuScreen implements Screen {
 
     private ParallaxLayer[] layers;
 
-    private Stage stage;
-    private Skin skin;
     private Main game;
+    private SpriteBatch batch;
+    private TextureAtlas atlas;
+    private Skin skin;
+    private BitmapFont font;
+    private Stage stage;
+    private Table table;
+    private TextButton playButton, settingsButton, exitButton;
 
     public MenuScreen(Main game) {
         this.game = game;
-        this.batch = game.batch; // Use the batch from Main to avoid unnecessary creation
+        this.batch = game.getBatch();
+        this.atlas = game.getTextureAtlas(); // Use the texture atlas from Main
+        this.skin = game.getSkin();         // Use the skin from Main
+        this.font = game.getFont();         // Use the font from Main
+
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         this.camera = new OrthographicCamera(1920, 1080);
 
-        // Initialize Parallax Layers
         layers = new ParallaxLayer[10];
         layers[0] = new ParallaxLayer(new Texture("Background/0.png"), 0.1f, true, false);
         layers[1] = new ParallaxLayer(new Texture("Background/1.png"), 0.2f, true, false);
@@ -54,10 +63,6 @@ public class MenuScreen implements Screen {
         for (ParallaxLayer layer : layers) {
             layer.setCamera(camera);
         }
-
-
-        // Load the skin for the buttons
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         // Create buttons
         TextButton playButton = new TextButton("Play", skin);
@@ -128,7 +133,7 @@ public class MenuScreen implements Screen {
         batch.end();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
-        
+
         stage.draw();
     }
 
@@ -151,7 +156,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
+        batch.dispose();
+        atlas.dispose();
         skin.dispose();
+        font.dispose();
     }
+
 }
