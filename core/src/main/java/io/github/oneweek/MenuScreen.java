@@ -1,3 +1,135 @@
+//package io.github.oneweek;
+//
+//import com.badlogic.gdx.Gdx;
+//import com.badlogic.gdx.Screen;
+//import com.badlogic.gdx.graphics.Camera;
+//import com.badlogic.gdx.graphics.GL20;
+//import com.badlogic.gdx.graphics.OrthographicCamera;
+//import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.graphics.g2d.BitmapFont;
+//import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+//import com.badlogic.gdx.scenes.scene2d.Stage;
+//import com.badlogic.gdx.scenes.scene2d.ui.Label;
+//import com.badlogic.gdx.scenes.scene2d.ui.Table;
+//import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+//import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+//import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+//import com.badlogic.gdx.utils.viewport.ScreenViewport;
+//
+//public class MenuScreen implements Screen {
+//    private Camera camera;
+//    private SpriteBatch batch;
+//    private boolean isPlaying = false;
+//    private ParallaxLayer[] layers;
+//    private Stage stage;
+//    private Main game;
+//
+//    public MenuScreen(Main game) {
+//        this.game = game;
+//        this.batch = game.batch;
+//        stage = new Stage(new ScreenViewport());
+//        Gdx.input.setInputProcessor(stage);
+//
+//        this.camera = new OrthographicCamera(1920, 1080);
+//
+//        // Initialize Parallax Layers
+//        layers = new ParallaxLayer[10];
+//        for (int i = 0; i < 10; i++) {
+//            layers[i] = new ParallaxLayer(new Texture("Background/" + i + ".png"), 0.1f * (i + 1), true, false);
+//            layers[i].setCamera(camera);
+//        }
+//
+//        // Create a simple default button style
+//        BitmapFont title = new BitmapFont(Gdx.files.internal("fonts/title.fnt")); // Replace with your font file path
+//        BitmapFont menu = new BitmapFont(Gdx.files.internal("fonts/menu.fnt")); // Replace with your font file path
+//
+//        TextButtonStyle buttonStyle = new TextButtonStyle();
+//        buttonStyle.font = menu;
+//
+//        // Create title label
+//        Label.LabelStyle labelStyle = new Label.LabelStyle(title, com.badlogic.gdx.graphics.Color.WHITE);
+//        Label titleLabel = new Label("Ronin's Trial", labelStyle);
+//
+//        // Create buttons
+//        TextButton playButton = new TextButton("Play", buttonStyle);
+//        TextButton settingsButton = new TextButton("Settings", buttonStyle);
+//        TextButton exitButton = new TextButton("Exit", buttonStyle);
+//
+//        // Add listeners
+//        playButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+//                isPlaying = true;
+//                game.setScreen(new GameScreen(game));
+//            }
+//        });
+//        settingsButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+//                if (!isPlaying) {
+//                    game.setScreen(new SettingsScreen(game));
+//                }
+//            }
+//        });
+//        exitButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+//                if (!isPlaying) {
+//                    Gdx.app.exit();
+//                }
+//            }
+//        });
+//
+//        // Arrange buttons using a table layout
+//        Table table = new Table();
+//        table.setFillParent(true);
+//        table.center();
+//        table.add(titleLabel).padBottom(100).row();
+//        table.add(playButton).padBottom(10).row();
+//        table.add(settingsButton).padBottom(10).row();
+//        table.add(exitButton);
+//
+//        stage.addActor(table);
+//    }
+//
+//    @Override
+//    public void show() {}
+//
+//    @Override
+//    public void render(float delta) {
+//        Gdx.gl.glClearColor(0.047f, 0.067f, 0.133f, 1f);
+//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//
+//        batch.begin();
+//        batch.setProjectionMatrix(camera.combined);
+//        for (ParallaxLayer layer : layers) {
+//            layer.render(batch);
+//        }
+//        batch.end();
+//
+//        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+//        stage.draw();
+//    }
+//
+//    @Override
+//    public void resize(int width, int height) {
+//        stage.getViewport().update(width, height, true);
+//    }
+//
+//    @Override
+//    public void pause() {}
+//
+//    @Override
+//    public void resume() {}
+//
+//    @Override
+//    public void hide() {}
+//
+//    @Override
+//    public void dispose() {
+//        stage.dispose();
+//    }
+//}
 package io.github.oneweek;
 
 import com.badlogic.gdx.Gdx;
@@ -6,33 +138,29 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class MenuScreen implements Screen {
     private Camera camera;
-    private Texture img;
-    private Player player;
     private SpriteBatch batch;
-
-    private int speed = 200;
-    private float acceleration = 50;
-    private float deceleration = 50;
-
+    private boolean isPlaying = false;
     private ParallaxLayer[] layers;
-
     private Stage stage;
-    private Skin skin;
     private Main game;
 
     public MenuScreen(Main game) {
         this.game = game;
-        this.batch = game.batch; // Use the batch from Main to avoid unnecessary creation
+        this.batch = game.batch;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -40,49 +168,55 @@ public class MenuScreen implements Screen {
 
         // Initialize Parallax Layers
         layers = new ParallaxLayer[10];
-        layers[0] = new ParallaxLayer(new Texture("Background/0.png"), 0.1f, true, false);
-        layers[1] = new ParallaxLayer(new Texture("Background/1.png"), 0.2f, true, false);
-        layers[2] = new ParallaxLayer(new Texture("Background/2.png"), 0.3f, true, false);
-        layers[3] = new ParallaxLayer(new Texture("Background/3.png"), 0.5f, true, false);
-        layers[4] = new ParallaxLayer(new Texture("Background/4.png"), 0.8f, true, false);
-        layers[5] = new ParallaxLayer(new Texture("Background/5.png"), 1.0f, true, false);
-        layers[6] = new ParallaxLayer(new Texture("Background/6.png"), 1.2f, true, false);
-        layers[7] = new ParallaxLayer(new Texture("Background/7.png"), 1.3f, true, false);
-        layers[8] = new ParallaxLayer(new Texture("Background/8.png"), 1.5f, true, false);
-        layers[9] = new ParallaxLayer(new Texture("Background/9.png"), 1.8f, true, false);
-
-        for (ParallaxLayer layer : layers) {
-            layer.setCamera(camera);
+        for (int i = 0; i < 10; i++) {
+            layers[i] = new ParallaxLayer(new Texture("Background/" + i + ".png"), 0.1f * (i + 1), true, false);
+            layers[i].setCamera(camera);
         }
 
+        // Load Fonts
+        BitmapFont title = new BitmapFont(Gdx.files.internal("fonts/title.fnt"));
+        BitmapFont menu = new BitmapFont(Gdx.files.internal("fonts/menu.fnt"));
 
-        // Load the skin for the buttons
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        // Create button style with background
+        Texture buttonTexture = new Texture("skin/menu-button.png");
+        TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
+
+        TextButtonStyle buttonStyle = new TextButtonStyle();
+        buttonStyle.font = menu;
+        buttonStyle.up = buttonDrawable;
+        buttonStyle.down = buttonDrawable.tint(com.badlogic.gdx.graphics.Color.DARK_GRAY);
+
+        // Create title label
+        Label.LabelStyle labelStyle = new Label.LabelStyle(title, com.badlogic.gdx.graphics.Color.WHITE);
+        Label titleLabel = new Label("Ronin's Trial", labelStyle);
 
         // Create buttons
-        TextButton playButton = new TextButton("Play", skin);
-        TextButton settingsButton = new TextButton("Settings", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
+        TextButton playButton = new TextButton("Play", buttonStyle);
+        TextButton settingsButton = new TextButton("Settings", buttonStyle);
+        TextButton exitButton = new TextButton("Exit", buttonStyle);
 
-        // Add listeners for the buttons
+        // Add listeners
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game)); // Go to the game screen
+                isPlaying = true;
+                game.setScreen(new GameScreen(game));
             }
         });
-
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new SettingsScreen(game));
+                if (!isPlaying) {
+                    game.setScreen(new SettingsScreen(game));
+                }
             }
         });
-
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                Gdx.app.exit(); // Exit the game
+                if (!isPlaying) {
+                    Gdx.app.exit();
+                }
             }
         });
 
@@ -90,45 +224,33 @@ public class MenuScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         table.center();
+        table.add(titleLabel).padBottom(70).row();
         table.add(playButton).padBottom(20).row();
         table.add(settingsButton).padBottom(20).row();
         table.add(exitButton);
 
+        buttonStyle.up.setMinWidth(250);
+        buttonStyle.up.setMinHeight(70);
         stage.addActor(table);
+
     }
 
     @Override
-    public void show() {
-    }
+    public void show() {}
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.047f, 0.067f, 0.133f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        float deltaTime = Gdx.graphics.getDeltaTime();
-
         batch.begin();
-//        batch.draw(layers[0].texture, camera.position.x - camera.viewportWidth / 2, camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
-//
-//        if (!Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed < 300 && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-//            speed += acceleration;
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed > 0) {
-//            speed -= deceleration;
-//        }
-//
-//        camera.position.x += speed * deltaTime;
-//        camera.update();
         batch.setProjectionMatrix(camera.combined);
-
         for (ParallaxLayer layer : layers) {
             layer.render(batch);
         }
         batch.end();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
-        
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
@@ -138,20 +260,16 @@ public class MenuScreen implements Screen {
     }
 
     @Override
-    public void pause() {
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 }

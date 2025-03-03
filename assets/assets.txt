@@ -60,8 +60,15 @@ atlas/game_atlas.png
 audio/01. Aerial City.mp3
 audio/02. To the Limit.mp3
 audio/03. Wind Trail.mp3
+fonts/menu.fnt
+fonts/menu.png
+fonts/title.fnt
+fonts/title1.png
+fonts/title2.png
 skin/default.fnt
 skin/default.png
+skin/menu-button.png
+skin/raw/GUI.png
 skin/raw/button-checked.png
 skin/raw/button-down.png
 skin/raw/button-up.png
