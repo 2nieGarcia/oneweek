@@ -39,22 +39,30 @@ public class GameScreen implements Screen, AnswerListener {
     private float deceleration = 50;
 
     private static final float ATTACK_ANIMATION_DURATION = 2.5f; // Adjust as needed
-    private static final float DYING_ANIMATION_DURATION = 1f;  // Adjust as needed
+    private static final float DYING_ANIMATION_DURATION = 2f;  // Adjust as needed
 
     private float playerOffsetX = -1400;
     private ParallaxLayer[] layers;
 
     private String[] quizChoiceTest = {"Ako", "sya", "Ewan ko tangina", "Pwet ni hudas na malaki"};
     private PlayerHearts playerhearts;
-    private int lives = 3; // Initial lives
 
     public GameScreen(Main game, String difficulty) {
         this.game = game;
         this.batch = game.batch;
         this.camera = new OrthographicCamera(1920, 1080);
         this.player = new Player(-2000, -320);
+        int lives = 3;
         this.playerhearts = new PlayerHearts(lives);
         this.difficulty = difficulty;
+
+        uiLocked = true;
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                uiLocked = false;
+            }
+        }, 1.0f);
 
         attackSound = Gdx.audio.newSound(Gdx.files.internal("fx/attack.mp3"));
         hurtSound = Gdx.audio.newSound(Gdx.files.internal("fx/hurt.mp3"));
