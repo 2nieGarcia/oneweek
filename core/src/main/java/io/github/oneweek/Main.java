@@ -14,7 +14,7 @@ public class Main extends Game {
     public SpriteBatch batch;
     public Music backgroundMusic;
     public Preferences preferences;
-    private float audioVolume = 0.5f;  // Default full volume
+    private float audioVolume = 0.2f;  // Default full volume
 
 
     private TextureAtlas atlas;
@@ -35,7 +35,11 @@ public class Main extends Game {
         float savedVolume = preferences.getFloat("volume", 0.5f);
 
         // Load and play background music
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/01. Aerial City.mp3"));
+
+        int trackNumber = MathUtils.random(1, 3);
+        String musicPath = "audio/music" + trackNumber + ".mp3";
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(musicPath));
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(savedVolume);
         backgroundMusic.play();

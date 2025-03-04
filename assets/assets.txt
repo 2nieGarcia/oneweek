@@ -61,9 +61,9 @@ atlas/game_atlas.atlas
 atlas/game_atlas.png
 atlas/quiz-panel.atlas
 atlas/quiz-panel.png
-audio/01. Aerial City.mp3
-audio/02. To the Limit.mp3
-audio/03. Wind Trail.mp3
+audio/music1.mp3
+audio/music2.mp3
+audio/music3.mp3
 fonts/menu.fnt
 fonts/menu.png
 fonts/title.fnt
