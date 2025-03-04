@@ -69,9 +69,15 @@ fonts/menu.png
 fonts/title.fnt
 fonts/title1.png
 fonts/title2.png
+fx/attack.mp3
+fx/hurt.mp3
 quiz.json
+quiz/all-easy.json
+quiz/all-hard.json
+quiz/all-medium.json
 skin/default.fnt
 skin/default.png
+skin/defaultbackup.fnt
 skin/menu-button-hovered.png
 skin/menu-button-pressed.png
 skin/menu-button.png

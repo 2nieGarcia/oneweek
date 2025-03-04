@@ -3,6 +3,7 @@ package io.github.oneweek;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class QuizPanel {
@@ -122,9 +123,14 @@ public class QuizPanel {
         if (!isBreaking && !isRespawning) {
             GlyphLayout layout = new GlyphLayout(font, panelText);
             // Convert to integer values to prevent shaky rendering
-            int fixedX = Math.round(x + (width * scale - layout.width) / 2);
-            int fixedY = Math.round(y + (height * scale + layout.height) / 2);
-            font.draw(batch, panelText, fixedX, fixedY);
+            float containerWidth = width * scale * 0.5f;
+            float textX = x + (width * scale - containerWidth) / 2;
+            // Set Y near the top of the panel with some padding
+            float textY = (float) (y + (height * scale) / 1.5);
+
+            // Draw the text with wrapping and centered alignment
+            font.draw(batch, panelText, textX, textY, containerWidth, Align.center, true);
+
 
         }
     }

@@ -82,7 +82,7 @@ public class MenuScreen implements Screen {
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 if (!isPlaying) {
                     isPlaying = true;
-                    game.setScreen(new GameScreen(game));
+                    game.setScreen(new DifficultyScreen(game));
                 }
             }
         });

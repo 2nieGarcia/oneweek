@@ -19,8 +19,9 @@ public class Choice {
     private Camera camera;
     private String choiceText;
     private BitmapFont font;
+    private AnswerListener listener;
 
-    public Choice(float x, float y, boolean isRightAnswer, Camera camera, String choiceText) {
+    public Choice(float x, float y, boolean isRightAnswer, Camera camera, String choiceText, AnswerListener listener) {
         this.x = x;
         this.y = y;
         this.width = 500; // Button size
@@ -33,10 +34,10 @@ public class Choice {
         this.isPressed = false;
         this.camera = camera;
         this.choiceText = choiceText;
+        this.listener = listener;
 
         // Load font
         font = new BitmapFont(Gdx.files.internal("fonts/menu.fnt"));
-
         font.getData().setScale(.8f, .8f);
         font.setUseIntegerPositions(false);
     }
@@ -45,6 +46,13 @@ public class Choice {
         this.x = x;
         this.y = y;
     }
+
+    // Add a setter to update the choice text and correctness when a new question loads
+    public void setChoice(String newChoiceText, boolean isRightAnswer) {
+        this.choiceText = newChoiceText;
+        this.isRightAnswer = isRightAnswer;
+    }
+
 
     public void update(float delta) {
         // Get mouse position in world coordinates
@@ -89,10 +97,9 @@ public class Choice {
     }
 
     private void handleClick() {
-        if (isRightAnswer) {
-            System.out.println("Correct answer selected!");
-        } else {
-            System.out.println("Wrong answer. Try again!");
+        // Notify the listener about the answer result
+        if (listener != null) {
+            listener.onAnswerSelected(isRightAnswer);
         }
     }
 
