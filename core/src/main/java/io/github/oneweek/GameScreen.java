@@ -196,6 +196,7 @@ public class GameScreen implements Screen, AnswerListener {
         float uiOffsetX = camera.position.x;
         float uiOffsetY = camera.position.y;
 
+
         quizPanel.setPosition(uiOffsetX - 150, uiOffsetY - 300);
 
         choices[0].setPosition(uiOffsetX - 600, uiOffsetY - 525);

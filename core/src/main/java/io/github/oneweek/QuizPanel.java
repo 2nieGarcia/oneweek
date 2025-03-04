@@ -126,7 +126,9 @@ public class QuizPanel {
             float containerWidth = width * scale * 0.5f;
             float textX = x + (width * scale - containerWidth) / 2;
             // Set Y near the top of the panel with some padding
-            float textY = (float) (y + (height * scale) / 1.5);
+            float textY = (float) Math.floor(y + (height * scale) / 1.5);
+
+
 
             // Draw the text with wrapping and centered alignment
             font.draw(batch, panelText, textX, textY, containerWidth, Align.center, true);
