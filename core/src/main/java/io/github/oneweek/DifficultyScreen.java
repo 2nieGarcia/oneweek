@@ -19,22 +19,27 @@ public class DifficultyScreen implements Screen {
     private Main game;
     private Stage stage;
 
+    private boolean isPlaying = false;
+    private Sound openSound, closeSound;
+    private BitmapFont titleFont, buttonFont;
+    private Texture buttonTexture, buttonPressedTexture, buttonHoveredTexture;
+
     public DifficultyScreen(Main game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Sound openSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_open.mp3"));
-        Sound closeSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_close.mp3"));
+        openSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_open.mp3"));
+        closeSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_close.mp3"));
 
         // Load fonts
-        BitmapFont titleFont = new BitmapFont(Gdx.files.internal("fonts/title.fnt"));
-        BitmapFont buttonFont = new BitmapFont(Gdx.files.internal("fonts/menu.fnt"));
+        titleFont = new BitmapFont(Gdx.files.internal("fonts/title.fnt"));
+        buttonFont = new BitmapFont(Gdx.files.internal("fonts/menu.fnt"));
 
         // Load button textures
-        Texture buttonTexture = new Texture(Gdx.files.internal("skin/menu-button.png"));
-        Texture buttonPressedTexture = new Texture(Gdx.files.internal("skin/menu-button-pressed.png"));
-        Texture buttonHoveredTexture = new Texture(Gdx.files.internal("skin/menu-button-hovered.png"));
+        buttonTexture = new Texture(Gdx.files.internal("skin/menu-button.png"));
+        buttonPressedTexture = new Texture(Gdx.files.internal("skin/menu-button-pressed.png"));
+        buttonHoveredTexture = new Texture(Gdx.files.internal("skin/menu-button-hovered.png"));
 
         // Create button drawables
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
@@ -64,25 +69,34 @@ public class DifficultyScreen implements Screen {
         easyButton.addListener(new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                // Transition to GameScreen with "Easy" difficulty
-                game.setScreen(new GameScreen(game, "Easy"));
-                openSound.play(game.getAudioVolume());
+                if (!isPlaying) {
+                    isPlaying = true;
+                    // Transition to GameScreen with "Easy" difficulty
+                    game.setScreen(new GameScreen(game, "Easy"));
+                    openSound.play(game.getAudioVolume());
+                }
             }
         });
 
         mediumButton.addListener(new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, "Medium"));
-                openSound.play(game.getAudioVolume());
+                if (!isPlaying) {
+                    isPlaying = true;
+                    game.setScreen(new GameScreen(game, "Medium"));
+                    openSound.play(game.getAudioVolume());
+                }
             }
         });
 
         hardButton.addListener(new ClickListener(){
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game, "Hard"));
-                openSound.play(game.getAudioVolume());
+                if (!isPlaying) {
+                    isPlaying = true;
+                    game.setScreen(new GameScreen(game, "Hard"));
+                    openSound.play(game.getAudioVolume());
+                }
             }
         });
 
@@ -90,8 +104,10 @@ public class DifficultyScreen implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                game.setScreen(new MenuScreen(game));
-                closeSound.play(game.getAudioVolume());
+                if (!isPlaying) {
+                    game.setScreen(new MenuScreen(game));
+                    closeSound.play(game.getAudioVolume());
+                }
             }
         });
 
@@ -137,5 +153,12 @@ public class DifficultyScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        openSound.dispose();
+        closeSound.dispose();
+        titleFont.dispose();
+        buttonFont.dispose();
+        buttonTexture.dispose();
+        buttonPressedTexture.dispose();
+        buttonHoveredTexture.dispose();
     }
 }
