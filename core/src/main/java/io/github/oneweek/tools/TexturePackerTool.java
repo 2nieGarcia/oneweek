@@ -14,9 +14,9 @@ public class TexturePackerTool {
 //        );
 
         TexturePacker.process(
-            "assets/skin/raw", // Input folder (where GUI images are)
-            "assets/skin",           // Output folder (where atlas & packed texture will be saved)
-            "pixel-ui"                         // Atlas file name (output: pixel-ui.atlas & pixel-ui.png)
+            "assets/skin/quiz/quizpanel", // Input folder (where GUI images are)
+            "assets/atlas",           // Output folder (where atlas & packed texture will be saved)
+            "quiz-panel"                         // Atlas file name (output: pixel-ui.atlas & pixel-ui.png)
         );
         System.out.println("TexturePacker completed!");
 

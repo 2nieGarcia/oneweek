@@ -12,45 +12,36 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameScreen implements Screen {
     private Main game;
     private SpriteBatch batch;
-    private Camera camera;
-    private Texture img;
+    private OrthographicCamera camera;
     private Player player;
+    private QuizPanel quizPanel;
+    private Choice[] choices;
 
     private int speed = 200;
     private float acceleration = 50;
     private float deceleration = 50;
 
     private float playerOffsetX = -1400;
-
     private ParallaxLayer[] layers;
 
     public GameScreen(Main game) {
         this.game = game;
-        this.batch = game.batch; // Use the batch from Main to avoid unnecessary creation
+        this.batch = game.batch;
         this.camera = new OrthographicCamera(1920, 1080);
         this.player = new Player(-2000, -320);
 
-        // Initialize Parallax Layers
         layers = new ParallaxLayer[10];
-        layers[0] = new ParallaxLayer(new Texture("Background/0.png"), 0.1f, true, false);
-        layers[1] = new ParallaxLayer(new Texture("Background/1.png"), 0.2f, true, false);
-        layers[2] = new ParallaxLayer(new Texture("Background/2.png"), 0.3f, true, false);
-        layers[3] = new ParallaxLayer(new Texture("Background/3.png"), 0.5f, true, false);
-        layers[4] = new ParallaxLayer(new Texture("Background/4.png"), 0.8f, true, false);
-        layers[5] = new ParallaxLayer(new Texture("Background/5.png"), 1.0f, true, false);
-        layers[6] = new ParallaxLayer(new Texture("Background/6.png"), 1.2f, true, false);
-        layers[7] = new ParallaxLayer(new Texture("Background/7.png"), 1.3f, true, false);
-        layers[8] = new ParallaxLayer(new Texture("Background/8.png"), 1.5f, true, false);
-        layers[9] = new ParallaxLayer(new Texture("Background/9.png"), 1.8f, true, false);
-
-        for (ParallaxLayer layer : layers) {
-            layer.setCamera(camera);
+        for (int i = 0; i < 10; i++) {
+            layers[i] = new ParallaxLayer(new Texture("Background/" + i + ".png"), 0.1f * (i + 1), true, false);
+            layers[i].setCamera(camera);
         }
-    }
 
-    @Override
-    public void show() {
-        // Called when this screen becomes the current screen
+        quizPanel = new QuizPanel(0, 0, 300);
+
+        choices = new Choice[3];
+        for (int i = 0; i < 3; i++) {
+            choices[i] = new Choice(0, 0);
+        }
     }
 
     @Override
@@ -61,7 +52,10 @@ public class GameScreen implements Screen {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         batch.begin();
-        batch.draw(layers[0].texture, camera.position.x - camera.viewportWidth / 2, camera.viewportHeight / 2, camera.viewportWidth, camera.viewportHeight);
+
+        for (ParallaxLayer layer : layers) {
+            layer.render(batch);
+        }
 
         if (!Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed < 300 && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             speed += acceleration;
@@ -74,14 +68,25 @@ public class GameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        for (ParallaxLayer layer : layers) {
-            layer.render(batch);
+        float uiOffsetX = camera.position.x;
+        float uiOffsetY = camera.position.y;
+
+        quizPanel.setPosition(uiOffsetX - 150, uiOffsetY - 300);
+
+        choices[0].setPosition(uiOffsetX - 250, uiOffsetY - 100);
+        choices[1].setPosition(uiOffsetX, uiOffsetY - 100);
+        choices[2].setPosition(uiOffsetX + 250, uiOffsetY - 100);
+
+        quizPanel.update(deltaTime);
+        quizPanel.render(batch);
+
+        for (Choice choice : choices) {
+            choice.update(deltaTime);
+            choice.render(batch);
         }
 
-        // Player stays fixed relative to the camera
         float playerOffsetY = -280;
-        if(playerOffsetX < -800) playerOffsetX += 460 * deltaTime;
-
+        if (playerOffsetX < -800) playerOffsetX += 460 * deltaTime;
         player.setPosition(camera.position.x + playerOffsetX, camera.position.y + playerOffsetY);
 
         player.update(deltaTime);
@@ -90,6 +95,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             player.setState(Player.PlayerState.IDLE);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            quizPanel.breakPanel();
             player.setState(Player.PlayerState.ATTACKING);
         } else {
             player.setState(Player.PlayerState.RUNNING);
@@ -99,24 +105,25 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        // Handle screen resizing
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
     public void dispose() {
-        // Dispose resources if necessary
+        for (ParallaxLayer layer : layers) {
+            layer.dispose();
+        }
+        quizPanel.dispose();
+        for (Choice choice : choices) {
+            choice.dispose();
+        }
     }
+
+    @Override
+    public void resize(int width, int height) {}
+    @Override
+    public void pause() {}
+    @Override
+    public void resume() {}
+    @Override
+    public void hide() {}
+    @Override
+    public void show() {}
 }
+
