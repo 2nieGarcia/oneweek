@@ -5,10 +5,19 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -16,86 +25,105 @@ import java.io.IOException;
 public class QuizScreen implements Screen {
     private Main game;
     private SpriteBatch batch;
-    private OrthographicCamera uiCamera;
     private BitmapFont font;
     private Array<Question> questions;
     private int currentQuestionIndex = 0;
+    private Stage stage;
+    private TextButton optionA, optionB, optionC, optionD;
+    private Skin skin;
 
-    public QuizScreen(Main game) {
+    public QuizScreen(Main game, String selectedCategory, String selectedDifficulty) {
         this.game = game;
-        this.batch = game.batch;
+        batch = game.getBatch();
+        font = game.getFont();
+        questions = new Array<>();
+        skin = game.getSkin();
+        stage = new Stage(new ScreenViewport());
+        // Question Label
+        Label questionLabel = new Label("What is the capital of France?", skin);
 
-        // Set up a fixed UI camera for consistent UI rendering.
-        uiCamera = new OrthographicCamera(1920, 1080);
-        uiCamera.position.set(1920 / 2f, 1080 / 2f, 0);
-        uiCamera.update();
+        // Answer Buttons
+        optionA = new TextButton("A: Berlin", skin);
+        optionB = new TextButton("B: Paris", skin);
+        optionC = new TextButton("C: Madrid", skin);
+        optionD = new TextButton("D: Rome", skin);
 
-        font = new BitmapFont();
-        loadQuestions();
+        // Add Click Listeners
+        optionA.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                checkAnswer("Berlin");
+            }
+        });
+        optionB.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                checkAnswer("Paris");
+            }
+        });
+        optionC.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                checkAnswer("Madrid");
+            }
+        });
+        optionD.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                checkAnswer("Rome");
+            }
+        });
+
+        // Table Layout
+        Table table = new Table();
+        table.setFillParent(true);
+        table.center();
+        table.add(questionLabel).padBottom(20).colspan(2);
+        table.row();
+        table.add(optionA).pad(20);
+        table.add(optionB).pad(20);
+        table.row();
+        table.add(optionC).pad(20);
+        table.add(optionD).pad(20);
+
+        stage.addActor(table);
+
+
+    }
+
+    private void checkAnswer(String selectedAnswer) {
+        if (selectedAnswer.equals("Paris")) {
+            System.out.println("Correct!");
+
+            Gdx.app.exit();
+        } else {
+            System.out.println("Wrong!");
+        }
     }
 
     private void loadQuestions() {
-        FileHandle file = Gdx.files.internal("quiz.json");
-        String jsonString = file.readString();
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            // Assumes quiz.json is a JSON array of question objects.
-            Question[] questionArray = mapper.readValue(jsonString, Question[].class);
-            questions = new Array<>(questionArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-            questions = new Array<>();
-        }
+
     }
 
     @Override
     public void render(float delta) {
-        // Clear the screen with a dark gray color.
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        batch.setProjectionMatrix(uiCamera.combined);
-
-        if (questions.size > 0) {
-            Question currentQuestion = questions.get(currentQuestionIndex);
-            // Draw the question text.
-            font.draw(batch, currentQuestion.getQuestion(), 660, 800);
-
-            // Draw each answer option.
-            String[] answers = currentQuestion.getAnswers();
-            for (int i = 0; i < answers.length; i++) {
-                font.draw(batch, (i + 1) + ". " + answers[i], 660, 700 - (i * 50));
-            }
-
-            // Handle answer input via numeric keys.
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) checkAnswer(0);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) checkAnswer(1);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) checkAnswer(2);
-            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) checkAnswer(3);
-        }
-
-        batch.end();
+        stage.act(delta);
+        stage.draw();
     }
 
-    private void checkAnswer(int selectedIndex) {
-        if (questions.get(currentQuestionIndex).isCorrect(selectedIndex)) {
-            System.out.println("Correct!");
-        } else {
-            System.out.println("Wrong!");
-        }
-        // Move to the next question, cycling back to the first if needed.
-        currentQuestionIndex = (currentQuestionIndex + 1) % questions.size;
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
-    @Override public void show() { }
-    @Override public void resize(int width, int height) { }
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
     @Override public void pause() { }
     @Override public void resume() { }
     @Override public void hide() { }
 
     @Override
     public void dispose() {
-        font.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 }

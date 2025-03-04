@@ -73,4 +73,8 @@ public class Main extends Game {
         batch.dispose();
         backgroundMusic.dispose();
     }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
 }
