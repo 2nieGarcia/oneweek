@@ -7,28 +7,30 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class Question {
-    private String question;
-    private String[] answers;
-    private int correctIndex;
+    private final String question;
+    private final String[] answers;
+    private final int correctIndex;
 
     public Question(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode json = mapper.readTree(jsonString);
 
-        // Retrieve the question and the correct answer
-        this.question = json.get("question").asText();
-        String correctAnswer = json.get("correct_answer").asText();
+        // Retrieve the question and decode HTML entities
+        this.question = StringEscapeUtils.unescapeHtml4(json.get("question").asText());
+        // Retrieve the correct answer and decode HTML entities
+        String correctAnswer = StringEscapeUtils.unescapeHtml4(json.get("correct_answer").asText());
 
         // Retrieve the array of incorrect answers
         JsonNode incorrectAnswersArray = json.get("incorrect_answers");
 
-        // Combine the correct answer with the incorrect answers
+        // Combine the correct answer with the incorrect answers, decoding each
         List<String> allAnswers = new ArrayList<>();
         allAnswers.add(correctAnswer);
         for (JsonNode node : incorrectAnswersArray) {
-            allAnswers.add(node.asText());
+            allAnswers.add(StringEscapeUtils.unescapeHtml4(node.asText()));
         }
 
         // Shuffle the answers so the correct answer is in a random position
