@@ -109,6 +109,13 @@ skin/raw/button-checked.png
 skin/raw/button-down.png
 skin/raw/button-up.png
 skin/raw/default.png.webp
+skin/raw/hearts/1.png
+skin/raw/hearts/2.png
+skin/raw/hearts/3.png
+skin/raw/hearts/4.png
+skin/raw/hearts/5.png
+skin/raw/hearts/6.png
+skin/raw/hearts/7.png
 skin/raw/slider-background.png
 skin/raw/slider-knob.png
 skin/uiskin.atlas

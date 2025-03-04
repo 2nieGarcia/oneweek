@@ -45,12 +45,15 @@ public class GameScreen implements Screen, AnswerListener {
     private ParallaxLayer[] layers;
 
     private String[] quizChoiceTest = {"Ako", "sya", "Ewan ko tangina", "Pwet ni hudas na malaki"};
+    private PlayerHearts playerhearts;
+    private int lives = 3; // Initial lives
 
     public GameScreen(Main game, String difficulty) {
         this.game = game;
         this.batch = game.batch;
         this.camera = new OrthographicCamera(1920, 1080);
         this.player = new Player(-2000, -320);
+        this.playerhearts = new PlayerHearts(lives);
         this.difficulty = difficulty;
 
         attackSound = Gdx.audio.newSound(Gdx.files.internal("fx/attack.mp3"));
@@ -154,6 +157,9 @@ public class GameScreen implements Screen, AnswerListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         float deltaTime = Gdx.graphics.getDeltaTime();
+
+        playerhearts.update(Gdx.graphics.getDeltaTime());
+
         batch.begin();
 
         for (ParallaxLayer layer : layers) {
@@ -206,11 +212,14 @@ public class GameScreen implements Screen, AnswerListener {
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             quizPanel.breakPanel();
             player.setState(Player.PlayerState.ATTACKING);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.H))    {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            playerhearts.loseHeart();
             player.setState(Player.PlayerState.DYING);
         } else {
         player.setState(Player.PlayerState.RUNNING);
         }
+
+        playerhearts.render(batch, camera.position.x - camera.viewportWidth / 2 + 50, camera.position.y + camera.viewportHeight / 2 - 100);
 
 
         batch.end();
@@ -218,6 +227,7 @@ public class GameScreen implements Screen, AnswerListener {
 
     @Override
     public void dispose() {
+        playerhearts.dispose();
         for (ParallaxLayer layer : layers) {
             layer.dispose();
         }
