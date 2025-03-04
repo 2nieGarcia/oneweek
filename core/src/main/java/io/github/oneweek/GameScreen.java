@@ -57,10 +57,10 @@ public class GameScreen implements Screen {
             layer.render(batch);
         }
 
-        if (!Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed < 300 && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if ( speed < 300 && player.isRunning()) {
             speed += acceleration;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && speed > 0) {
+        if (!player.isRunning() && speed > 0) {
             speed -= deceleration;
         }
 
@@ -93,14 +93,22 @@ public class GameScreen implements Screen {
         player.update(deltaTime);
         player.render(batch);
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R) && quizPanel.isAnimationFinished()) {
+            quizPanel.changeText("Miss ko na sya");
+            quizPanel.respawnPanel();
+
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             player.setState(Player.PlayerState.IDLE);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             quizPanel.breakPanel();
             player.setState(Player.PlayerState.ATTACKING);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+            player.setState(Player.PlayerState.DYING);
         } else {
-            player.setState(Player.PlayerState.RUNNING);
-        }
+        player.setState(Player.PlayerState.RUNNING);
+    }
 
         batch.end();
     }

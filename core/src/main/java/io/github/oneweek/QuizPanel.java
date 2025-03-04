@@ -18,6 +18,7 @@ public class QuizPanel {
     private float scale = 3.5f;
     private OrthographicCamera uiCamera;
 
+    private boolean isDestroyed;
     private boolean respawnAfterBreak;
 
     private String panelText;
@@ -56,7 +57,7 @@ public class QuizPanel {
         stateTime = 0;
         isBreaking = false;
         isRespawning = false;
-        respawnAfterBreak = true;
+        respawnAfterBreak = false;
 
         panelText = "Welcome to the Quiz!";
 
@@ -88,6 +89,8 @@ public class QuizPanel {
                     isRespawning = true;
                     stateTime = 0;
                 } else {
+                    isBreaking = false;
+                    isDestroyed = true;
                     stateTime = 0;
                 }
             }
@@ -97,12 +100,15 @@ public class QuizPanel {
             stateTime += delta;
             if (respawnAnimation.isAnimationFinished(stateTime)) {
                 isRespawning = false;
+                isDestroyed = false;
                 stateTime = 0;
             }
         }
     }
 
     public void render(SpriteBatch batch) {
+        if (isDestroyed) return;
+
         TextureRegion currentFrame;
 
         if (isBreaking) {
@@ -114,14 +120,19 @@ public class QuizPanel {
         }
 
         batch.draw(currentFrame, x, y, width * scale, height * scale);
+        if (!isBreaking && !isRespawning) {
+            GlyphLayout layout = new GlyphLayout(font, panelText);
+            // Convert to integer values to prevent shaky rendering
+            int fixedX = Math.round(x + (width * scale - layout.width) / 2);
+            int fixedY = Math.round(y + (height * scale + layout.height) / 2);
+            font.draw(batch, panelText, fixedX, fixedY);
 
-        GlyphLayout layout = new GlyphLayout(font, panelText);
-        font.draw(batch, panelText, x + (width * scale - layout.width) / 2, y + (height * scale + layout.height) / 2);
-
+        }
     }
 
     public void breakPanel() {
         isBreaking = true;
+        isDestroyed = false;
         stateTime = 0;
     }
 
@@ -131,6 +142,7 @@ public class QuizPanel {
 
     public void respawnPanel() {
         isBreaking = false;
+        isDestroyed = false;
         isRespawning = true;
         stateTime = 0;
     }

@@ -22,6 +22,8 @@ Character/Attack/4.png
 Character/Attack/5.png
 Character/Attack/6.png
 Character/Attack/7.png
+Character/Attack/8.png
+Character/Attack/9.png
 Character/HURT.png
 Character/Hurt/1.png
 Character/Hurt/2.png

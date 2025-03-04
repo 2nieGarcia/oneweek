@@ -26,7 +26,7 @@ public class Player {
         // Load animations from PNG files
         runAnimation = loadAnimation("Character/Run/", 16, 0.08f, Animation.PlayMode.LOOP);
         idleAnimation = loadAnimation("Character/Idle/", 10, 0.2f, Animation.PlayMode.LOOP);
-        attackAnimation = loadAnimation("Character/Attack/", 7, 0.08f, Animation.PlayMode.NORMAL);
+        attackAnimation = loadAnimation("Character/Attack/", 9, 0.08f, Animation.PlayMode.NORMAL);
         dieAnimation = loadAnimation("Character/Hurt/", 4, 0.2f, Animation.PlayMode.NORMAL);
     }
 
@@ -81,5 +81,9 @@ public class Player {
             this.currentState = newState;
             stateTime = 0; // Reset animation time on state change
         }
+    }
+
+    public boolean isRunning() {
+        return currentState == PlayerState.RUNNING;
     }
 }
