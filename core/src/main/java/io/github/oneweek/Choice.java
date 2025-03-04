@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Choice {
     private Texture idleTexture, hoverTexture, pressedTexture;
     private float x, y;
+    private float width, height;
     private boolean isHovered, isPressed;
+    private float scale = 2.0f;
 
-    public Choice(float x, float y) {
+    public Choice(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.idleTexture = new Texture(Gdx.files.internal("skin/quiz/quizbutton/quizbutton.png"));
@@ -44,7 +46,7 @@ public class Choice {
 
     public void render(SpriteBatch batch) {
         Texture currentTexture = isPressed ? pressedTexture : (isHovered ? hoverTexture : idleTexture);
-        batch.draw(currentTexture, x, y);
+        batch.draw(currentTexture, x, y, 250, 150);
     }
 
     private void handleClick() {

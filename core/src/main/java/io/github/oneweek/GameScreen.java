@@ -38,9 +38,9 @@ public class GameScreen implements Screen {
 
         quizPanel = new QuizPanel(0, 0, 300);
 
-        choices = new Choice[3];
-        for (int i = 0; i < 3; i++) {
-            choices[i] = new Choice(0, 0);
+        choices = new Choice[4];
+        for (int i = 0; i < 4; i++) {
+            choices[i] = new Choice(0, 0, 50, 50);
         }
     }
 
@@ -73,9 +73,10 @@ public class GameScreen implements Screen {
 
         quizPanel.setPosition(uiOffsetX - 150, uiOffsetY - 300);
 
-        choices[0].setPosition(uiOffsetX - 250, uiOffsetY - 100);
-        choices[1].setPosition(uiOffsetX, uiOffsetY - 100);
-        choices[2].setPosition(uiOffsetX + 250, uiOffsetY - 100);
+        choices[0].setPosition(uiOffsetX - 850, uiOffsetY - 500);
+        choices[1].setPosition(uiOffsetX - 350, uiOffsetY - 500);
+        choices[2].setPosition(uiOffsetX + 150, uiOffsetY - 500);
+        choices[3].setPosition(uiOffsetX + 650, uiOffsetY - 500);
 
         quizPanel.update(deltaTime);
         quizPanel.render(batch);

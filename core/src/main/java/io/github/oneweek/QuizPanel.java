@@ -2,11 +2,7 @@ package io.github.oneweek;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.Array;
 
 public class QuizPanel {
@@ -119,7 +115,9 @@ public class QuizPanel {
 
         batch.draw(currentFrame, x, y, width * scale, height * scale);
 
-        font.draw(batch, panelText, x + 10, y + height - 20);
+        GlyphLayout layout = new GlyphLayout(font, panelText);
+        font.draw(batch, panelText, x + (width * scale - layout.width) / 2, y + (height * scale + layout.height) / 2);
+
     }
 
     public void breakPanel() {
