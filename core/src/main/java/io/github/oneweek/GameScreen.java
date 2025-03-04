@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class GameScreen implements Screen {
     private Main game;
     private SpriteBatch batch;
@@ -23,6 +26,8 @@ public class GameScreen implements Screen {
 
     private float playerOffsetX = -1400;
     private ParallaxLayer[] layers;
+
+    private String[] quizChoiceTest = {"Ako", "sya", "Ewan ko tangina", "Pwet ni hudas na malaki"};
 
     public GameScreen(Main game) {
         this.game = game;
@@ -40,8 +45,13 @@ public class GameScreen implements Screen {
 
         choices = new Choice[4];
         for (int i = 0; i < 4; i++) {
-            choices[i] = new Choice(0, 0, 50, 50);
+            if (i == 0 ){ choices[i] = new Choice(0, 0, true, camera, quizChoiceTest[i]); continue; }
+
+            choices[i] = new Choice(0, 0, false, camera, quizChoiceTest[i]);
         }
+
+        // Shuffle the choices after they have been created
+        Collections.shuffle(Arrays.asList(choices));
     }
 
     @Override
@@ -73,10 +83,12 @@ public class GameScreen implements Screen {
 
         quizPanel.setPosition(uiOffsetX - 150, uiOffsetY - 300);
 
-        choices[0].setPosition(uiOffsetX - 850, uiOffsetY - 500);
-        choices[1].setPosition(uiOffsetX - 350, uiOffsetY - 500);
-        choices[2].setPosition(uiOffsetX + 150, uiOffsetY - 500);
-        choices[3].setPosition(uiOffsetX + 650, uiOffsetY - 500);
+
+
+        choices[0].setPosition(uiOffsetX - 600, uiOffsetY - 525);
+        choices[1].setPosition(uiOffsetX - 600, uiOffsetY - 375);
+        choices[2].setPosition(uiOffsetX + 200, uiOffsetY - 525);
+        choices[3].setPosition(uiOffsetX + 200, uiOffsetY - 375);
 
         quizPanel.update(deltaTime);
         quizPanel.render(batch);
@@ -108,7 +120,8 @@ public class GameScreen implements Screen {
             player.setState(Player.PlayerState.DYING);
         } else {
         player.setState(Player.PlayerState.RUNNING);
-    }
+        }
+
 
         batch.end();
     }

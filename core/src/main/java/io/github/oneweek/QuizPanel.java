@@ -59,8 +59,7 @@ public class QuizPanel {
         isRespawning = false;
         respawnAfterBreak = false;
 
-        panelText = "Welcome to the Quiz!";
-
+        panelText = "sino may tae sa pwet?";
         font = new BitmapFont(Gdx.files.internal("fonts/menu.fnt"));
     }
 
