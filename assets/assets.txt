@@ -71,6 +71,8 @@ fonts/title1.png
 fonts/title2.png
 fx/attack.mp3
 fx/hurt.mp3
+fx/ui_close.mp3
+fx/ui_open.mp3
 quiz.json
 quiz/all-easy.json
 quiz/all-hard.json

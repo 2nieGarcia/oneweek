@@ -62,6 +62,10 @@ public class PlayerHearts {
         }
     }
 
+    public int getLives() {
+        return lives;
+    }
+
     public void dispose() {
         for (Texture t : heartFrames) {
             t.dispose();

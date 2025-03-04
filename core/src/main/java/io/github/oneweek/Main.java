@@ -7,12 +7,15 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Main extends Game {
     public SpriteBatch batch;
     public Music backgroundMusic;
     public Preferences preferences;
+    private float audioVolume = 0.5f;  // Default full volume
+
 
     private TextureAtlas atlas;
     private Skin skin;
@@ -29,7 +32,7 @@ public class Main extends Game {
 
         // Load preferences
         preferences = Gdx.app.getPreferences("GameSettings");
-        float savedVolume = preferences.getFloat("volume", 1.0f);
+        float savedVolume = preferences.getFloat("volume", 0.5f);
 
         // Load and play background music
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/01. Aerial City.mp3"));
@@ -63,6 +66,18 @@ public class Main extends Game {
         preferences.flush();
     }
 
+    public void setAudioVolume(float volume) {
+        // Clamp the value between 0 and 1 to avoid out-of-range issues.
+        this.audioVolume = MathUtils.clamp(volume, 0.0f, 1.0f);
+        // If you have any currently playing sound effects and want to adjust their volume,
+        // you could update them here. Otherwise, this value is stored and used when playing sounds.
+    }
+
+    // Getter for audio volume if needed in other parts of your game.
+    public float getAudioVolume() {
+        return this.audioVolume;
+    }
+
     @Override
     public void render() {
         super.render(); // Delegate render to the active screen
@@ -73,4 +88,5 @@ public class Main extends Game {
         batch.dispose();
         backgroundMusic.dispose();
     }
+
 }

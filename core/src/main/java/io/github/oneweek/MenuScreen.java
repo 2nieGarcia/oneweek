@@ -2,6 +2,7 @@ package io.github.oneweek;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -71,9 +72,8 @@ public class MenuScreen implements Screen {
         TextButton settingsButton = new TextButton("Settings", buttonStyle);
         TextButton exitButton = new TextButton("Exit", buttonStyle);
 
-
-
-
+        Sound openSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_open.mp3"));
+        Sound closeSound = Gdx.audio.newSound(Gdx.files.internal("fx/ui_close.mp3"));
 
 
         // Add listeners
@@ -83,6 +83,7 @@ public class MenuScreen implements Screen {
                 if (!isPlaying) {
                     isPlaying = true;
                     game.setScreen(new DifficultyScreen(game));
+                    openSound.play(game.getAudioVolume());
                 }
             }
         });
@@ -91,6 +92,7 @@ public class MenuScreen implements Screen {
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 if (!isPlaying) {
                     game.setScreen(new SettingsScreen(game));
+                    openSound.play(game.getAudioVolume());
                 }
             }
         });

@@ -38,8 +38,8 @@ public class GameScreen implements Screen, AnswerListener {
     private float acceleration = 50;
     private float deceleration = 50;
 
-    private static final float ATTACK_ANIMATION_DURATION = 3f; // Adjust as needed
-    private static final float DYING_ANIMATION_DURATION = 3f;  // Adjust as needed
+    private static final float ATTACK_ANIMATION_DURATION = 2.5f; // Adjust as needed
+    private static final float DYING_ANIMATION_DURATION = 1f;  // Adjust as needed
 
     private float playerOffsetX = -1400;
     private ParallaxLayer[] layers;
@@ -124,13 +124,14 @@ public class GameScreen implements Screen, AnswerListener {
         if (isCorrect) {
             System.out.println("Correct answer selected!");
             player.setState(Player.PlayerState.ATTACKING);
-            attackSound.play();
+            attackSound.play(game.getAudioVolume());
             quizPanel.breakPanel();
             delay = ATTACK_ANIMATION_DURATION;
         } else {
             System.out.println("Wrong answer. Try again!");
             player.setState(Player.PlayerState.DYING);
-            hurtSound.play();
+            hurtSound.play(game.getAudioVolume());
+            playerhearts.loseHeart();
             // Optionally, trigger a negative effect on quizPanel or similar
             delay = DYING_ANIMATION_DURATION;
         }
@@ -158,7 +159,14 @@ public class GameScreen implements Screen, AnswerListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        playerhearts.update(Gdx.graphics.getDeltaTime());
+        // Update player hearts (this updates the heart animation and state)
+        playerhearts.update(deltaTime);
+
+        // Check if the player is out of lives and switch to GameOverScreen
+        if (playerhearts.getLives() <= 0) {
+            game.setScreen(new GameOverScreen(game, difficulty));
+            return;  // Skip the rest of the render to allow the transition
+        }
 
         batch.begin();
 
@@ -166,7 +174,7 @@ public class GameScreen implements Screen, AnswerListener {
             layer.render(batch);
         }
 
-        if ( speed < 300 && player.isRunning()) {
+        if (speed < 300 && player.isRunning()) {
             speed += acceleration;
         }
         if (!player.isRunning() && speed > 0) {
@@ -207,23 +215,26 @@ public class GameScreen implements Screen, AnswerListener {
             quizPanel.respawnPanel();
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            player.setState(Player.PlayerState.IDLE);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            quizPanel.breakPanel();
-            player.setState(Player.PlayerState.ATTACKING);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.H)) {
-            playerhearts.loseHeart();
-            player.setState(Player.PlayerState.DYING);
-        } else {
-        player.setState(Player.PlayerState.RUNNING);
+        if (!uiLocked) { // Only update from input when not locked
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                player.setState(Player.PlayerState.IDLE);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                quizPanel.breakPanel();
+                player.setState(Player.PlayerState.ATTACKING);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.H)) {
+                playerhearts.loseHeart();
+                player.setState(Player.PlayerState.DYING);
+            } else {
+                player.setState(Player.PlayerState.RUNNING);
+            }
         }
 
+        // Render the player's hearts at the top-left (adjust positioning as needed)
         playerhearts.render(batch, camera.position.x - camera.viewportWidth / 2 + 50, camera.position.y + camera.viewportHeight / 2 - 100);
-
 
         batch.end();
     }
+
 
     @Override
     public void dispose() {
